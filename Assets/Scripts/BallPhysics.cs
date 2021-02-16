@@ -105,16 +105,16 @@ public class BallPhysics : MonoBehaviour
         float fInitVelMag = Mathf.Sqrt((2 * Mathf.Abs(Physics.gravity.y) * fMaxHeight)) / Mathf.Sin(fTheta);
 
         // Gets the direction to the TargetDisplay/where we want to aim
-        Vector3 Direction = (m_TargetDisplay.transform.position - transform.position);
-        Debug.Log(Direction.ToString());
+        Vector3 direction = (m_TargetDisplay.transform.position - transform.position);
+        Debug.Log(direction.ToString());
         // y component is 0 because this vector will not be used in calculating the vertical motion
-        Direction.y = 0;
+        direction.y = 0;
         // Normalized to isolate the direction
-        Direction = Direction.normalized;
+        direction = direction.normalized;
 
-        m_vInitialVel.x = fInitVelMag * Mathf.Cos(fTheta) * Direction.x;
+        m_vInitialVel.x = fInitVelMag * Mathf.Cos(fTheta) * direction.x;
         m_vInitialVel.y = fInitVelMag * Mathf.Sin(fTheta);
-        m_vInitialVel.z = fInitVelMag * Mathf.Cos(fTheta) * Direction.z;
+        m_vInitialVel.z = fInitVelMag * Mathf.Cos(fTheta) * direction.z;
 
         m_rb.velocity = m_vInitialVel;
     }
