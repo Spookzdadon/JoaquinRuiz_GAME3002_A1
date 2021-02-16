@@ -37,12 +37,12 @@ public class BallPhysics : MonoBehaviour
             m_TargetDisplay.transform.position = m_vTargetPos;
             vDebugHeading = m_vTargetPos - transform.position;
         }
-
         if (m_bDebugKickBall && m_bIsGrounded)
         {
             m_bDebugKickBall = false;
             OnKickBall();
         }
+
     }
 
     private void CreateTargetDisplay()
@@ -75,8 +75,14 @@ public class BallPhysics : MonoBehaviour
 
         float fInitVelMag = Mathf.Sqrt((2 * Mathf.Abs(Physics.gravity.y) * fMaxHeight)) / Mathf.Sin(fTheta);
 
+        Vector3 Direction = (m_TargetDisplay.transform.position - transform.position);
+        Debug.Log(Direction.ToString("F3"));
+        Direction.y = 0;
+        Direction = Direction.normalized;
+
         m_vInitialVel.y = fInitVelMag * Mathf.Sin(fTheta);
-        m_vInitialVel.z = fInitVelMag * Mathf.Cos(fTheta);
+        m_vInitialVel.x = fInitVelMag * Mathf.Cos(fTheta) * Direction.x;
+        m_vInitialVel.z = fInitVelMag * Mathf.Cos(fTheta) * Direction.z;
 
         m_rb.velocity = m_vInitialVel;
     }
@@ -90,6 +96,7 @@ public class BallPhysics : MonoBehaviour
     #region CALLBACKS
     public void OnLaunchProjectile()
     {
+
         float fMaxHeight = m_TargetDisplay.transform.position.y;
         float fRange = (m_fDistanceToTarget * 2);
         float fTheta = Mathf.Atan((4 * fMaxHeight) / (fRange));
@@ -97,8 +104,17 @@ public class BallPhysics : MonoBehaviour
 
         float fInitVelMag = Mathf.Sqrt((2 * Mathf.Abs(Physics.gravity.y) * fMaxHeight)) / Mathf.Sin(fTheta);
 
+        // Gets the direction to the TargetDisplay/where we want to aim
+        Vector3 Direction = (m_TargetDisplay.transform.position - transform.position);
+        Debug.Log(Direction.ToString());
+        // y component is 0 because this vector will not be used in calculating the vertical motion
+        Direction.y = 0;
+        // Normalized to isolate the direction
+        Direction = Direction.normalized;
+
+        m_vInitialVel.x = fInitVelMag * Mathf.Cos(fTheta) * Direction.x;
         m_vInitialVel.y = fInitVelMag * Mathf.Sin(fTheta);
-        m_vInitialVel.z = fInitVelMag * Mathf.Cos(fTheta);
+        m_vInitialVel.z = fInitVelMag * Mathf.Cos(fTheta) * Direction.z;
 
         m_rb.velocity = m_vInitialVel;
     }
